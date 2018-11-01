@@ -1,0 +1,145 @@
+  <link rel="stylesheet" type="text/css" href="/css/buttons.dataTables.min.css">
+  <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> Match List</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Match Management</li>
+          <li class="breadcrumb-item active"><a href="#">Match List</a></li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <div class="tile-body">
+              <table class="table table-hover table-bordered" id="sampleTable">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>Liked User</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>Date</th>
+                     <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+                <!-- <tfoot>
+                  <tr>
+                   <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+              </tfoot> -->
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+{{#section 'script'}}
+    <script type="text/javascript" src="/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="/js/jszip.min.js"></script>
+    <script type="text/javascript" src="/js/pdfmake.min.js"></script>
+    <script type="text/javascript" src="/js/vfs_fonts.js"></script>
+    <script type="text/javascript" src="/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/sweetalert.min.js"></script>
+    <script type="text/javascript">
+    var table=$('#sampleTable').dataTable({
+      processing : true,
+      serverSide : true,
+      searching: false,
+      dom: 'Bflrtip',
+                 buttons: [
+            {
+                extend: 'collection',
+                text: 'Download',
+                buttons:
+                    [
+                               
+                        {
+                            extend: "copy",
+                            footer:false
+                        },
+                        {
+                            extend: "csv",
+                            footer: false
+                        },
+                        {
+                            extend: "excel",
+                            footer:false
+                        },
+                        {
+                            extend: "pdf",
+                            footer:false
+                        },
+                        {
+                            extend: "print",
+                            footer: false
+                        }
+
+                    ]
+            }
+            ],
+      order: [[ 6, 'desc' ]],
+      ajax : { url: '/admins/matchdata' },
+      columns : [
+          {'data': 'user_id.name'},
+          {'data': 'user_id.gender'},
+          {'data': 'user_id.country'},
+          {'data': 'liked_user_id.name'},
+          {'data': 'liked_user_id.gender'},
+          {'data': 'liked_user_id.country'},
+          {'data': 'date'},
+          {'data': 'button'}
+      ]
+    });
+    // $('#sampleTable tfoot tr').insertAfter($('#sampleTable thead tr'))
+    $('#sampleTable tfoot tr').insertBefore($('#sampleTable thead tr'));
+    </script>
+    <script type="text/javascript">
+      $(document).on('click','.matchdelete',function(e) {
+          var ev=$(this);
+          var id=$(this).data('id');
+          swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this Record!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+          }, function(isConfirm) {
+            if (isConfirm) {
+              $.ajax({
+               url:"/admins/match-delete/"+id,
+               type:'get',
+               success:function(resp) {
+                if (resp.status='success') {
+                  $(ev).closest('tr').hide();
+                  swal("Deleted!", "Match has been deleted.", "success");
+                }
+               }
+            })
+          } else {
+            swal("Cancelled", "Match is safe :)", "error");
+          }
+        });
+      });
+    </script>
+{{/section}}

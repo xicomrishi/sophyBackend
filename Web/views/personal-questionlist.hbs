@@ -1,0 +1,112 @@
+  <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> Pool B List</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">Question Management</li>
+          <li class="breadcrumb-item active"><a href="#">Pool B List</a></li>
+        </ul>
+      </div>
+      <div class="row d-print-none mt-2">
+        <div class="col-12 text-right"><a class="btn btn-primary" href="/admins/add-question" style="height: 36px;margin-bottom: 10px;color: #ffffff;"><i class="fa fa-question-circle"></i>Add Question</a></div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <div class="tile-body">
+              <table class="table table-hover table-bordered" id="sampleTable">
+                <thead>
+                  <tr>
+                    <th>Question</th>
+                    <th>Type</th>
+                    <th style="width: 21%">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th>Type</th>
+                    <th style="width: 21%"></th>
+                  </tr>
+              </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+{{#section 'script'}}
+    <script type="text/javascript" src="/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">
+    var table=$('#sampleTable').dataTable({
+      processing : true,
+      serverSide : true,
+      ajax : { url: '/admins/personal-questionlist' },
+      initComplete: function () {
+       this.api().columns([1]).every( function () {
+                    var column = this;
+                    var select = $('<select><option value="">Select Option</option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                   select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                } );
+    },
+      columns : [
+          {'data': 'question'},
+          {'data': 'type'},
+          {'data': 'button'}
+      ]
+    });
+    // $('#sampleTable tfoot tr').insertAfter($('#sampleTable thead tr'))
+    $('#sampleTable tfoot tr').insertBefore($('#sampleTable thead tr'));
+    </script>
+      <script type="text/javascript">
+        $(document).on('click','.userclick',function(e) {
+          var ev=$(this);
+          e.preventDefault();
+          var id=$(this).data('id');
+          var status=$(this).attr('rel');
+            $.ajax({
+             url:"/admins/question-status/"+id+'/'+status,
+             type:'POST',
+             success:function(resp) {
+               $(ev).text(resp.status);
+               $(ev).attr('rel',resp.status);
+             }
+          })
+        })
+      </script>
+      <script type="text/javascript">
+        $(document).on('click','.qdelete',function(e) {
+          var ev=$(this);
+          e.preventDefault();
+          var id=$(this).data('id');
+            $.ajax({
+             url:"/admins/question-delete/"+id,
+             type:'POST',
+             success:function(resp) {
+              if (resp.status='success') {
+                $(ev).closest('tr').hide();
+              }
+             }
+          })
+        })
+      </script>
+{{/section}}

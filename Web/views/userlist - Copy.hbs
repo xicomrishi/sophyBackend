@@ -1,0 +1,122 @@
+  <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> User List</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">User Management</li>
+          <li class="breadcrumb-item active"><a href="#">User List</a></li>
+        </ul>
+      </div>
+<!--       <div class="row d-print-none mt-2">
+        <div class="col-12 text-right"><a class="btn btn-primary" href="/admins/add-user" style="height: 36px;margin-bottom: 10px;color: #ffffff;"><i class="fa fa-user"></i>Add User</a></div>
+      </div> -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <div class="tile-body">
+              <table class="table table-hover table-bordered" id="sampleTable">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>Phone</th>
+                    <th>Seeking</th>
+                    <th style="width: 11%">Image</th>
+                    <th style="width: 21%">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>Phone</th>
+                    <th>Seeking</th>
+                    <th style="width: 11%"></th>
+                    <th style="width: 21%"></th>
+                  </tr>
+              </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+{{#section 'script'}}
+    <script type="text/javascript" src="/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript">
+    var table=$('#sampleTable').dataTable({
+      processing : true,
+      serverSide : true,
+      ajax : { url: '/admins/userdata' },
+      initComplete: function () {
+       this.api().columns([0,1,2,3,4]).every( function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                   select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+                } );
+    },
+      columns : [
+          {'data': 'name'},
+          {'data': 'gender'},
+          {'data': 'country'},
+          {'data': 'mobile'},
+          {'data': 'seeking'},
+          {'data': 'images'},
+          {'data': 'button'},
+      ]
+    });
+    </script>
+      <script type="text/javascript">
+        $(document).on('click','.userclick',function(e) {
+          var ev=$(this);
+          e.preventDefault();
+          var id=$(this).data('id');
+          var status=$(this).attr('rel');
+            $.ajax({
+             url:"/admins/change-status/"+id+'/'+status,
+             type:'POST',
+             success:function(resp) {
+               $(ev).text(resp.status);
+               $(ev).attr('rel',resp.status);
+             }
+          })
+        })
+      </script>
+      <script type="text/javascript">
+        $(document).on('click','.userdelete',function(e) {
+          var ev=$(this);
+          e.preventDefault();
+          var id=$(this).data('id');
+            $.ajax({
+             url:"/admins/user-delete/"+id,
+             type:'POST',
+             success:function(resp) {
+              if (resp.status='success') {
+                $(ev).closest('tr').hide();
+              }
+             }
+          })
+        })
+      </script>
+{{/section}}

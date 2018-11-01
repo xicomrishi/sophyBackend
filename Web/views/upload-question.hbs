@@ -1,0 +1,50 @@
+<main class="app-content">
+   <div class="row user">
+      <div class="col-md-12">
+         <div class="tab-content">
+            <div class="tab-pane active" id="user-settings">
+               <div class="tile user-settings">
+                  <h4 class="line-head">Bulk Upload Questions</h4>
+                  {{#if uploaded}}
+                    <div class="alert alert-success alert-dismissible">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                      Questions Uploded Successfully
+                    </div>
+                  {{/if}}
+                  <form method='post' action='/admins/upload-question' enctype='multipart/form-data' id="adduserform">
+                     <div class="clearfix"></div>
+                     <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>Upload CSV</label>
+                           <input class="form-control" type="file" name="csv">
+                        </div>
+                     </div>
+                     <div class="row mb-10">
+                        <div class="col-md-12">
+                           <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i> Submit</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</main>
+{{#section 'script'}}
+<script type="text/javascript">
+   $('#adduserform').validate({
+      rules:{
+       csv:"required",
+      },
+      // errorPlacement: function(error, element) {
+      //     if (element.attr("name") == "phone") {
+      //           error.appendTo('#phoneerror');
+      //     } else {
+      //         error.insertAfter(element);
+      //     }
+      //   }
+   });
+</script>
+{{/section}}
+

@@ -1,0 +1,67 @@
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <section class="invoice">
+            <div class="row mb-4">
+              <div class="col-6">
+                <h2 class="page-header"><i class="fa fa-user"></i> View Compliant</h2>
+              </div>
+              <div class="col-6">
+                <h5 class="text-right">Compliant Date: {{data.date}}</h5>
+              </div>
+            </div>
+            <div class="row invoice-info">
+              <div class="col-4"><b>Name</b>  &nbsp;&nbsp;{{data.user_id.name}}<br><br><b>Country:&nbsp;&nbsp;</b> {{data.user_id.country}}<br><b>Mobile:&nbsp;&nbsp;&nbsp;&nbsp;</b> {{data.user_id.mobile}}<br><b>Gender:&nbsp;&nbsp;&nbsp;</b> {{data.user_id.gender}}<br><b>Seeking:&nbsp;&nbsp;&nbsp;</b> {{data.user_id.seeking}}<br><b>Compliant Type:&nbsp;&nbsp;&nbsp;</b> {{data.type}}</div>
+            </div>
+            <button class="btn btn-danger blockuser" rel="{{data.user_id._id}}" status="{{data.user_id.status}}" type="button">{{current}}</button>
+            <div class="row">
+              <div class="col-12 table-responsive">
+              <center><h4>Other Compliants</h4></center>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Reported User</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each other}}
+                      <tr>
+                      <td>{{this.user_id.name}}</td>
+                      <td>{{this.report_user_id.name}}</td>
+                      <td>{{this.type}}</td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+<!--             <div class="row d-print-none mt-2">
+              <div class="col-12 text-right"><a class="btn btn-primary" href="javascript:window.print();" target="_blank"><i class="fa fa-print"></i> Print</a></div>
+            </div> -->
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+{{#section 'script'}}
+<script type="text/javascript">
+$(document).on('click','.blockuser',function(e) {
+  var ev=$(this);
+  e.preventDefault();
+  var id=$(this).attr('rel');
+  var status=$(this).attr('status');
+    $.ajax({
+     url:"/admins/change-status/"+id+'/'+status,
+     type:'POST',
+     success:function(resp) {
+       $(ev).text(resp.response);
+       //$(ev).closest('tr').find('td:eq(7)').text(resp.status);
+       $(ev).attr('status',resp.status);
+     }
+  })
+})
+</script>
+{{/section}}

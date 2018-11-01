@@ -1,0 +1,138 @@
+<main class="app-content">
+   <div class="row user">
+      <div class="col-md-12">
+         <div class="tab-content">
+            <div class="tab-pane active" id="user-settings">
+               <div class="tile user-settings">
+                  <h4 class="line-head">Add User</h4>
+                  <form method='post' action='/admins/adduser' enctype='multipart/form-data' id="adduserform">
+                     <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>Name</label>
+                           <input class="form-control" name="name" type="text">
+                        </div>
+                     </div>
+                     <div class="clearfix"></div>
+                     <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>Phone</label>
+                           <input class="form-control" name="phone" id="phone" type="text">
+                           <span id="phoneerror"></span>
+                        </div>
+                        
+                     </div>
+                     <div class="clearfix"></div>
+                      <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>Country</label>
+                           <input class="form-control" name="country" type="text">
+                        </div>
+                     </div>
+                     <div class="clearfix"></div>
+                      <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>DOB</label>
+                           <input class="form-control" name="dob" id="demoDate" type="text">
+                        </div>
+                     </div>
+                     <div class="clearfix"></div>
+                     <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>Gender</label>
+                             <span>
+                                <div class="animated-radio-button">
+                                <label>
+                                  <input type="radio" name="gender" checked value="male"><span class="label-text">Male</span>
+                                </label>
+                              </div>
+                              <div class="animated-radio-button">
+                                <label>
+                                  <input type="radio" name="gender" value="female"><span class="label-text">Female</span>
+                                </label>
+                              </div>
+
+                        </div>
+                     </div>
+                     <div class="clearfix"></div>
+                     <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>Seeking</label>
+                            <select class="form-control" name="seeking">
+                              <option value="relationship">relationship</option>
+                              <option value="dating">dating</option>
+                              <option value="friendship">friendship</option>
+                            </select>
+                        </div>
+                     </div>
+                     <div class="clearfix"></div>
+                     <div class="row">
+                        <div class="col-md-5 mb-4">
+                           <label>Profile Pic</label>
+                           <input class="form-control" type="file" name="images">
+                        </div>
+                     </div>
+                     <div class="row mb-10">
+                        <div class="col-md-12">
+                           <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i> Submit</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</main>
+{{#section 'script'}}
+<link rel="stylesheet" type="text/css" href="/css/intlTelInput.css">
+<script type="text/javascript" src="/js/plugins/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="/js/intlTelInput.js"></script>
+<script>
+    $("#phone").intlTelInput({
+        autoPlaceholder:'off',
+        // initialCountry: "auto",
+         initialCountry: "al",
+          geoIpLookup: function(callback) {
+            $.get('https://ipinfo.io', function() {}, "jsonp").always(function(resp) {
+              var countryCode = (resp && resp.country) ? resp.country : "";
+              callback(countryCode);
+            });
+          },
+        utilsScript: "/js/utils.js"
+    });
+</script>
+<script type="text/javascript">
+    $("#phone").on("countrychange", function(e, countryData) {
+        var countryData = $("#phone").intlTelInput("getSelectedCountryData");
+        var dialcode = countryData.dialCode;
+        var dialcode = '+'+dialcode;
+        var code=$("#phone").intlTelInput("getNumber");
+        $(this).val(dialcode);
+    });
+</script>
+<script type="text/javascript">
+  $('#demoDate').datepicker({
+    format: "dd/mm/yyyy",
+    autoclose: true,
+    todayHighlight: true,
+    endDate:'0d'
+  });
+</script>
+<script type="text/javascript">
+   $('#adduserform').validate({
+      rules:{
+       name:"required",
+       phone:"required",
+       dob:"required",
+      },
+      errorPlacement: function(error, element) {
+          if (element.attr("name") == "phone") {
+                error.appendTo('#phoneerror');
+          } else {
+              error.insertAfter(element);
+          }
+        }
+   });
+</script>
+{{/section}}
+

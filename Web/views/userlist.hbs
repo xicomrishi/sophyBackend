@@ -1,0 +1,356 @@
+  <link rel="stylesheet" type="text/css" href="/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/select.dataTables.min.css">
+  <link rel="stylesheet" href="/css/jquery-ui.css">
+  <link rel="stylesheet" href="/css/strip.css">
+  <style type="text/css">
+    .dataTables_length {
+      float: left;
+      margin: 0 0 20px 15px;
+    }
+    .btn.multidelete {
+        margin-left: 15px;
+        background-color: #f95454;
+        color: #fff;
+        padding: 4px 15px;
+        border-radius: 5px;
+    }
+    .hideme {
+      display:none;
+    }
+  </style>
+  <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> Active Users List</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">User Management</li>
+          <li class="breadcrumb-item active"><a href="#">Active Users</a></li>
+        </ul>
+      </div>
+<!--       <div class="row d-print-none mt-2">
+        <div class="col-12 text-right"><a class="btn btn-primary" href="/admins/add-user" style="height: 36px;margin-bottom: 10px;color: #ffffff;"><i class="fa fa-user"></i>Add User</a></div>
+      </div> -->
+      <button class="btn btn-default multidelete">Delete</button>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <div class="tile-body">
+              <table class="table table-hover table-bordered" id="sampleTable">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>Phone</th>
+                    <th>Seeking</th>
+                    <th>SignUp Date</th>
+                    <th style="width: 11%">Image</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th style="display: none;">User Id</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="width: 11%"></th>
+                    <th></th>
+                    <th></th>
+                    <th style="display: none;"></th>
+                  </tr>
+              </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+{{#section 'script'}}
+    <script type="text/javascript" src="/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="/js/jszip.min.js"></script>
+    <script type="text/javascript" src="/js/pdfmake.min.js"></script>
+    <script type="text/javascript" src="/js/vfs_fonts.js"></script>
+    <script type="text/javascript" src="/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="/js/strip.pkgd.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script type="text/javascript" src="/js/plugins/sweetalert.min.js"></script>
+    <script type="text/javascript" src="/js/dataTables.select.min.js"></script>
+    <script type="text/javascript">
+       jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+          "extract-date-pre": function(value) {
+              console.log(value);
+              var date = value;
+              date = date.split('-');
+              return Date.parse(date[1] + '/' + date[0] + '/' + date[2])
+          },
+          "extract-date-asc": function(a, b) {
+              return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+          },
+          "extract-date-desc": function(a, b) {
+              return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+          }
+      });
+    var table=$('#sampleTable').dataTable({
+      processing : true,
+      select: {
+            style: 'multi'
+        },
+      columnDefs: [{
+            type: 'extract-date',
+            targets: [6]
+        },
+        { 'visible': true, 'targets': [10] ,className:'hideme' }
+      ],
+      order: [[ 0, 'desc' ]],
+      dom: 'Bflrtip',
+        // buttons: [
+        //     'copy', 'csv', 'excel', 'pdf', 'print'
+        // ],
+           buttons: [
+            {
+                extend: 'collection',
+                text: 'Download',
+                buttons:
+                    [
+                               
+                        {
+                            extend: "copy",
+                            //exportOptions: { columns: ':visible:not(:last-child)' }, //last column has the action types detail/edit/delete
+                            exportOptions: { columns: ':visible:not(:nth-last-child(4),:nth-last-child(3),:nth-last-child(2),:nth-last-child(1))' },
+                            footer:false
+                        },
+                        {
+                            extend: "csv",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(4),:nth-last-child(3),:nth-last-child(2),:nth-last-child(1))' },
+                            footer: false
+                        },
+                        {
+                            extend: "excel",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(4),:nth-last-child(3),:nth-last-child(2),:nth-last-child(1))' },
+                            footer:false
+                        },
+                        {
+                            extend: "pdf",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(4),:nth-last-child(3),:nth-last-child(2),:nth-last-child(1))' },
+                            footer:false
+                        },
+                        {
+                            extend: "print",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(4),:nth-last-child(3),:nth-last-child(2),:nth-last-child(1))' },
+                            footer: false
+                        }
+
+                    ]
+            }
+            ],
+      serverSide : true,
+      ajax : { url: '/admins/userdata' },
+      initComplete: function () {
+       this.api().columns([2,3,5]).every( function () {
+                    var column = this;
+                    var select = $('<select class="rsfield"><option value="">Select</option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                   select.append( '<option value="'+d+'">'+d+'</option>' );
+                } );
+                } );
+              this.api().columns([6]).every( function () {
+                    var column = this;
+                    var select = $('<input type="text" placeholder=" Choose Date" class="datepicker rsfield"/>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'keyup click change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+                });
+                     $(".datepicker").datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: "dd-mm-yy",
+                        //showOn: "button",
+                        showAnim: 'slideDown',
+                        showButtonPanel: false ,
+                        autoSize: true,
+                        //buttonImage: "//jqueryui.com/resources/demos/datepicker/images/calendar.gif",
+                        //buttonImageOnly: true,
+                        // buttonText: "Select date",
+                        closeText: "Clear"
+                      });
+
+                  this.api().columns([8]).every( function () {
+                    var column = this;
+                    var val='';
+                    var select = $('<button type="button" class="resetfields">Clear</button>')
+                        .appendTo( $(column.footer()).empty() ).on( 'click', function () {
+                            column
+                            .search(val ? '^'+val+'$' : '', true, false)
+                            .draw();
+                            $('.rsfield').val('').trigger('change');
+                        });
+                        
+                });
+    },
+      columns : [
+          {'data': 'index'},
+          {'data': 'name'},
+          {'data': 'gender'},
+          {'data': 'country'},
+          {'data': 'mobile'},
+          {'data': 'seeking'},
+          {'data': 'date'},
+          {'data': 'images'},
+          {'data': 'status'},
+          {'data': 'button'},
+          {'data': '_id'}
+      ]
+    });
+   $(document).on('click','.multidelete',function(e) {
+     var checkIds = [];
+      table.$('.selected').each(function(index,rowhtml){
+
+        var id= $(this).find('td:last-child').text();
+        checkIds.push(id);
+      });
+      console.log(checkIds.join())
+      if (checkIds.join()) {
+          swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover these Record!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+          }, function(isConfirm) {
+            if (isConfirm) {
+              $.ajax({
+               url:"/admins/multi-delete/",
+               type:'post',
+               data:{user_ids:checkIds.join()},
+               success:function(resp) {
+                if (resp.status='success') {
+                  table.$('.selected').each(function(index,rowhtml){
+                     $(this).hide();
+                  });
+                  swal("Deleted!", "Users has been deleted.", "success");
+                }
+               }
+            })
+          } else {
+            swal("Cancelled", "Users are safe :)", "error");
+          }
+        });
+      }
+    });
+    $('#sampleTable tfoot tr').insertBefore($('#sampleTable thead tr'));
+    $('#sampleTable_wrapper #sampleTable_length').insertAfter($('#sampleTable_wrapper .dt-buttons'));
+    $('.multidelete').insertAfter($('#sampleTable_length label'));
+    </script>
+      <script type="text/javascript">
+        $(document).on('click','.userclick',function(e) {
+          var ev=$(this);
+          e.preventDefault();
+          var id=$(this).data('id');
+          var status=$(this).attr('rel');
+            $.ajax({
+             url:"/admins/change-status/"+id+'/'+status,
+             type:'POST',
+             success:function(resp) {
+               $(ev).text(resp.response);
+               //$(ev).closest('tr').find('td:eq(7)').text(resp.status);
+               $(ev).attr('rel',resp.status);
+             }
+          })
+        })
+      </script>
+      <script type="text/javascript">
+        $(document).on('click','.userdelete',function(e) {
+          var ev=$(this);
+          e.preventDefault();
+          var id=$(this).data('id');
+            $.ajax({
+             url:"/admins/user-delete/"+id,
+             type:'POST',
+             success:function(resp) {
+              if (resp.status='success') {
+                $(ev).closest('tr').hide();
+              }
+             }
+          })
+        })
+       $(document).on('click','.userdelete',function(e) {
+          var ev=$(this);
+          var id=$(this).data('id');
+          swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this Record!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+          }, function(isConfirm) {
+            if (isConfirm) {
+              $.ajax({
+               url:"/admins/delete/"+id,
+               type:'get',
+               success:function(resp) {
+                if (resp.status='success') {
+                  $(ev).closest('tr').hide();
+                  swal("Deleted!", "User has been deleted.", "success");
+                }
+               }
+            })
+          } else {
+            swal("Cancelled", "User is safe :)", "error");
+          }
+        });
+      });
+      </script>
+      <script type="text/javascript">
+      	
+        $(document).on('click','.strp',function(event) {
+        	var url=$(this).children().attr('src');
+        	console.log(url)
+          Strip.show({
+			  url: url,
+			  options: {
+			    side: 'left'
+			  }
+			});
+        });
+      </script>
+{{/section}}

@@ -1,0 +1,42 @@
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <aside class="app-sidebar">
+      <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="{{#if user.profileimage}}/images/{{user.profileimage}}{{else}}/images/dummy.png{{/if}}" alt="User Image">
+        <div>
+          <p class="app-sidebar__user-name">{{#if user.firstname}}{{user.firstname}} {{user.lastname}} {{else}} Admin {{/if}}</p>
+        </div>
+      </div>
+      <ul class="app-menu">
+        <li><a class="app-menu__item {{#if_equal url '/admins/dashboard'}}active{{/if_equal}}" href="/"><i class="app-menu__icon fa fa-dashboard"></i><span class="app-menu__label">Dashboard</span></a></li>
+        <li class="treeview {{#if_equal url '/userlist'}}is-expanded{{/if_equal}}{{#if_equal url '/add-user'}}is-expanded{{/if_equal}}{{#if_equal url '/view'}}is-expanded{{/if_equal}}{{#if_equal url '/blocked-userlist'}}is-expanded{{/if_equal}}{{#if_equal url '/deactivated-userlist'}}is-expanded{{/if_equal}}"><a class="app-menu__item {{#if_equal url '/userlist'}}active{{/if_equal}}{{#if_equal url '/blocked-userlist'}}active{{/if_equal}}{{#if_equal url '/deactivated-userlist'}}active{{/if_equal}}" href="javascript:;" data-toggle="treeview"><i class="app-menu__icon fa fa-users"></i><span class="app-menu__label">User Management</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item {{#if_equal url '/userlist'}}active{{/if_equal}}" href="/admins/userlist"><i class="icon fa fa-circle-o"></i> Active Users</a></li>
+            <li><a class="treeview-item {{#if_equal url '/blocked-userlist'}}active{{/if_equal}}" href="/admins/blocked-userlist"><i class="icon fa fa-circle-o"></i> Blocked Users</a></li>
+            <li><a class="treeview-item {{#if_equal url '/deactivated-userlist'}}active{{/if_equal}}" href="/admins/deactivated-userlist"><i class="icon fa fa-circle-o"></i> Deactivated Users</a></li>
+          </ul>
+        </li>
+        <li class="treeview {{#if_equal url '/add-question'}}is-expanded{{/if_equal}}{{#if_equal url '/basic-question'}}is-expanded{{/if_equal}}{{#if_equal url '/deep-question'}}is-expanded{{/if_equal}}{{#if_equal url '/upload-question'}}is-expanded{{/if_equal}}"><a class="app-menu__item {{#if_equal url '/add-question'}}active{{/if_equal}}{{#if_equal url '/basic-question'}}active{{/if_equal}}{{#if_equal url '/deep-question'}}active{{/if_equal}}{{#if_equal url '/upload-question'}}active{{/if_equal}}" href="javascript:;" data-toggle="treeview"><i class="app-menu__icon fa fa-question-circle"></i><span class="app-menu__label">Question Management</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item {{#if_equal url '/basic-question'}}active{{/if_equal}}" href="/admins/basic-question"><i class="icon fa fa-circle-o"></i> Basic</a></li>
+            <li><a class="treeview-item {{#if_equal url '/deep-question'}}active{{/if_equal}}" href="/admins/deep-question"><i class="icon fa fa-circle-o"></i> Deep</a></li>
+            <li><a class="treeview-item {{#if_equal url '/add-question'}}active{{/if_equal}}" href="/admins/add-question"><i class="icon fa fa-circle-o"></i> Add Question</a></li>
+            <li><a class="treeview-item {{#if_equal url '/upload-question'}}active{{/if_equal}}" href="/admins/upload-question"><i class="icon fa fa-circle-o"></i> Bulk Upload</a></li>
+          </ul>
+        </li>
+        <li class="treeview {{#contains url '/compliant-list'}}is-expanded{{/contains}}{{#contains url '/compliant-view'}}is-expanded{{/contains}}"><a class="app-menu__item {{#contains url '/compliant-list'}}active{{/contains}}{{#contains url '/compliant-view'}}active{{/contains}}" href="javascript:;" data-toggle="treeview"><i class="app-menu__icon fa fa-laptop"></i><span class="app-menu__label">Compliant Management</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item {{#contains url '/compliant-list'}}active{{/contains}}" href="/admins/compliant-list"><i class="icon fa fa-circle-o"></i> Compliant List</a></li>
+          </ul>
+        </li>
+        <li class="treeview {{#contains url '/match-list'}}is-expanded{{/contains}}{{#contains url '/match-view'}}is-expanded{{/contains}}"><a class="app-menu__item {{#contains url '/match-list'}}active{{/contains}}{{#contains url '/match-view'}}active{{/contains}}" href="javascript:;" data-toggle="treeview"><i class="app-menu__icon fa fa-heart-o"></i><span class="app-menu__label">Match Management</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item {{#contains url '/match-list'}}active{{/contains}}" href="/admins/match-list"><i class="icon fa fa-circle-o"></i> Match List</a></li>
+          </ul>
+        </li>
+        <li class="treeview {{#contains url '/terms-conditions'}}is-expanded{{/contains}}{{#contains url '/privacy-policy'}}is-expanded{{/contains}}"><a class="app-menu__item {{#contains url '/terms-conditions'}}active{{/contains}}{{#contains url '/privacy-policy'}}active{{/contains}}" href="javascript:;" data-toggle="treeview"><i class="app-menu__icon fa fa-gear"></i><span class="app-menu__label">CMS Management</span><i class="treeview-indicator fa fa-angle-right"></i></a>
+          <ul class="treeview-menu">
+            <li><a class="treeview-item {{#contains url '/terms-conditions'}}active{{/contains}}" href="/admins/terms-conditions"><i class="icon fa fa-circle-o"></i> Terms & Conditions</a></li>
+          <li><a class="treeview-item {{#contains url '/privacy-policy'}}active{{/contains}}" href="/admins/privacy-policy"><i class="icon fa fa-circle-o"></i> Privacy Policy</a></li>
+          </ul>
+        </li>
+      </ul>
+    </aside>

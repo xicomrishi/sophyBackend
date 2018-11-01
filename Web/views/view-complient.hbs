@@ -1,0 +1,47 @@
+  <main class="app-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tile">
+          <section class="invoice">
+            <div class="row mb-4">
+              <div class="col-6">
+                <h2 class="page-header"><i class="fa fa-user"></i> View Complient</h2>
+              </div>
+              <div class="col-6">
+                <h5 class="text-right">Complient Date: {{data.date}}</h5>
+              </div>
+            </div>
+            <div class="row invoice-info">
+              <div class="col-4"><b>Name</b>  &nbsp;&nbsp;{{data.name}}<br><br><b>Country:&nbsp;&nbsp;</b> {{data.country}}<br><b>Mobile:&nbsp;&nbsp;&nbsp;&nbsp;</b> {{data.mobile}}<br><b>Gender:&nbsp;&nbsp;&nbsp;</b> {{data.gender}}<br><b>Seeking:&nbsp;&nbsp;&nbsp;</b> {{data.seeking}}</div>
+            </div>
+            <div class="row">
+              <div class="col-12 table-responsive">
+              <center><h4>Other Complients</h4></center>
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Sr no</th>
+                      <th>Reported User</th>
+                      <th>Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each other}}
+                      <tr>
+                      <td>{{inc @index}}</td>
+                      <td>{{this.name}}</td>
+                      <td>{{this.gender}}</td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+<!--             <div class="row d-print-none mt-2">
+              <div class="col-12 text-right"><a class="btn btn-primary" href="javascript:window.print();" target="_blank"><i class="fa fa-print"></i> Print</a></div>
+            </div> -->
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>

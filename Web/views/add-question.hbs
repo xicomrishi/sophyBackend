@@ -1,0 +1,95 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery-editable-select.css">
+<main class="app-content">
+   <div class="row">
+      <div class="col-md-12 tile">
+         <div class="col-md-6">
+            <form id="addqaform" method="POST" action="/admins/add-question">
+               <div class="">
+                  <h3 class="tile-title">Add Question</h3>
+                  <div class="tile-body">
+                     <div class="form-group">
+                        <label class="control-label">Question</label>
+                        <input class="form-control" name="question" type="text" placeholder="Enter Question">
+                     </div>
+                      <div class="form-group">
+                        <label class="control-label">Category</label>
+                        <select class="form-control" name="category" id="category">
+                          <option value="">Select Category</option>
+                          <option value="basic">Basic</option>
+                          <option value="deep">Deep</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label class="control-label">Owner</label>
+                        <select class="form-control" name="owner" id="owner">
+                          <option selected>Admin</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label class="control-label">Type</label>
+                        <select class="form-control" name="type" id="qtype">
+                          <option value="">Select Question Type</option>
+                          <option value="subjective">Subjective</option>
+                          <option value="objective">Objective</option>
+                        </select>
+                     </div>
+                     <span id="optionlist" style="display: none;">
+                     <div class="form-group">
+                        <label class="control-label">Option 1</label>
+                        <input class="form-control" name="option1" type="text" placeholder="Enter Option">
+                     </div>
+                     <div class="form-group">
+                        <label class="control-label">Option 2</label>
+                        <input class="form-control" name="option2" type="text" placeholder="Enter Option">
+                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Option 3</label>
+                        <input class="form-control" name="option3" type="text" placeholder="Enter Option">
+                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Option 4</label>
+                        <input class="form-control" name="option4" type="text" placeholder="Enter Option">
+                     </div>
+                     </span>
+                  </div>
+                  <div class="tile-footer">
+                     <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>&nbsp;&nbsp;&nbsp;<button class="btn btn-secondary" type="reset"><i class="fa fa-fw fa-lg fa-times-circle"></i>Reset</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+      <div class="clearix"></div>
+   </div>
+</main>
+{{#section 'script'}}
+<script type="text/javascript" src="/js/jquery-editable-select.js"></script>
+<script type="text/javascript">
+   $('#addqaform').validate({
+      rules:{
+       question:"required",
+       category:"required",
+       type:"required",
+       owner:"required",
+       // option1:"required",
+       // option2:"required",
+       // option3:"required",
+       // option4:"required",
+      }
+   });
+</script>
+<script type="text/javascript">
+  $('#owner').editableSelect({ effects: 'slide' });
+</script>
+<script type="text/javascript">
+  $(document).on('change','#qtype',function() {
+      var value = $(this).val();
+      if (value=='objective') {
+        $('#optionlist').attr('style','display:block;');
+      }else{
+        $('#optionlist').attr('style','display:none;');
+      }
+  })
+</script>
+{{/section}}
+

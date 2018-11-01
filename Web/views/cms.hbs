@@ -1,0 +1,38 @@
+<main class="app-content">
+   <div class="row user">
+      <div class="col-md-12">
+         <div class="tab-content">
+            <div class="tab-pane active" id="user-settings">
+               <div class="tile user-settings">
+                  <h4 class="line-head">{{title}}</h4>
+                  <form method='post' action='/admins/update-content' enctype='multipart/form-data' id="adduserform">
+                     <div class="row">
+                        <div class="col-md-10 mb-2">
+                           <label>Content</label>
+                           <textarea class="form-control" name="content" rows="30" placeholder="Enter Content">{{data.content}}</textarea>
+                        </div>
+                     </div>
+                     <input type="hidden" name="type" value="{{data.type}}">
+                     <div class="clearfix"></div>
+                     <div class="row mb-10">
+                        <div class="col-md-12">
+                           <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i> Submit</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</main>
+{{#section 'script'}}
+<script type="text/javascript">
+   $('#adduserform').validate({
+      rules:{
+       content:"required",
+      }
+   });
+</script>
+{{/section}}
+

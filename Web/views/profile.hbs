@@ -1,0 +1,109 @@
+<main class="app-content">
+      <div class="row user">
+        <div class="col-md-3">
+          <div class="tile p-0">
+            <ul class="nav flex-column nav-tabs user-tabs">
+              <li class="nav-item"><a class="nav-link active" href="#user-settings" data-toggle="tab">Profile</a></li>
+              <li class="nav-item"><a class="nav-link" href="#user-timeline" data-toggle="tab">Change Password</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="tab-content">
+            <div class="tab-pane active" id="user-settings">
+              <div class="tile user-settings">
+                <h4 class="line-head">Profile</h4>
+                <form method='post' action='/admins/profileupdate' enctype='multipart/form-data' id="profileupdateform">
+                  <div class="row mb-4">
+                    <div class="col-md-4">
+                      <label>First Name</label>
+                      <input class="form-control" name="firstname" {{#if user.firstname}} value="{{user.firstname}}" {{else}} {{/if}} type="text">
+                    </div>
+                    <div class="col-md-4">
+                      <label>Last Name</label>
+                      <input class="form-control" name="lastname" value="{{user.lastname}}" type="text">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-8 mb-4">
+                      <label>Email</label>
+                      <input class="form-control" name="email" value="{{user.email}}" type="text">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-8 mb-4">
+                      <label>Mobile No</label>
+                      <input class="form-control" name="phone" value="{{user.phone}}" type="text">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-8 mb-4">
+                      <label>Profile Pic</label>
+                      <input class="form-control" type="file" name="profileimage">
+                    </div>
+                  </div>
+                  <div class="row mb-10">
+                    <div class="col-md-12">
+                    <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i> Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="user-timeline">
+              <div class="tile user-settings">
+                <h4 class="line-head">Change Password</h4>
+                <form method='post' action='/admins/updatepassword' enctype='multipart/form-data' id="cpasswordform">
+                  <div class="row">
+                    <div class="col-md-8 mb-4">
+                      <label>Old Password</label>
+                      <input class="form-control" name="oldpassword" type="text">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-8 mb-4">
+                      <label>New Password</label>
+                      <input class="form-control" id="newpassword" name="newpassword" type="text">
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-8 mb-4">
+                      <label>Confirm Password</label>
+                      <input class="form-control" name="confirmpassword" type="text">
+                    </div>
+                  </div>
+                  <div class="row mb-10">
+                    <div class="col-md-12">
+                      <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i> Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+{{#section 'script'}}
+<script type="text/javascript">
+    $('#profileupdateform').validate({
+       rules:{
+        firstname:"required",
+        lastname:"required",
+        email:{
+            required:true,
+            email:true
+        }
+       }
+    });
+</script>
+    <script type="text/javascript">
+    $('#cpasswordform').validate({
+       rules:{
+        oldpassword:"required",
+        newpassword:"required",
+        confirmpassword:{
+            required:true,
+            equalTo:'#newpassword'
+        }
+       }
+    });
+</script>
+{{/section}}

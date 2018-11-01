@@ -1,0 +1,84 @@
+<main class="app-content">
+   <div class="row">
+      <div class="col-md-12 tile">
+         <div class="col-md-6">
+            <form id="addqaform" method="POST" action="/admins/update-question">
+               <div class="">
+                  <h3 class="tile-title">Edit Question</h3>
+                  <div class="tile-body">
+                     <div class="form-group">
+                        <label class="control-label">Question</label>
+                        <input class="form-control" name="question" type="text" value="{{data.question}}" placeholder="Enter Question">
+                     </div>
+                     <input type="hidden" name="_id" value="{{data._id}}">
+                      <div class="form-group">
+                        <label class="control-label">Category</label>
+                        <select class="form-control" name="category" id="category">
+                          <option value="">Select Category</option>
+                          <option value="basic" {{#if_equal data.category 'basic'}}selected{{/if_equal}}>Basic</option>
+                          <option value="deep" {{#if_equal data.category 'deep'}}selected{{/if_equal}}>Deep</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label class="control-label">Type</label>
+                        <select class="form-control" name="type" id="qtype">
+                          <option value="">Select Question Type</option>
+                          <option value="subjective" {{#if_equal data.type 'subjective'}}selected{{/if_equal}}>Subjective</option>
+                          <option value="objective" {{#if_equal data.type 'objective'}}selected{{/if_equal}}>Objective</option>
+                        </select>
+                     </div>
+                     <span id="optionlist" style="{{#if_equal data.type 'objective'}}display:block;{{/if_equal}}{{#if_equal data.type 'subjective'}}display:none;{{/if_equal}}">
+                     <div class="form-group">
+                        <label class="control-label">Option 1</label>
+                        <input class="form-control" name="option1" type="text" value="{{data.option1}}" placeholder="Enter Option">
+                     </div>
+                     <div class="form-group">
+                        <label class="control-label">Option 2</label>
+                        <input class="form-control" name="option2" type="text" value="{{data.option2}}" placeholder="Enter Option">
+                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Option 3</label>
+                        <input class="form-control" name="option3" type="text" value="{{data.option3}}" placeholder="Enter Option">
+                     </div>
+                    <div class="form-group">
+                        <label class="control-label">Option 4</label>
+                        <input class="form-control" name="option4" type="text" value="{{data.option4}}" placeholder="Enter Option">
+                     </div>
+                     </span>
+                  </div>
+                  <div class="tile-footer">
+                     <button class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i>Submit</button>&nbsp;&nbsp;&nbsp;<a class="btn btn-secondary" href="{{url}}"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cancel</a>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+      <div class="clearix"></div>
+   </div>
+</main>
+{{#section 'script'}}
+<script type="text/javascript">
+   $('#addqaform').validate({
+      rules:{
+       question:"required",
+       category:"required",
+       type:"required",
+       option1:"required",
+       option2:"required",
+       option3:"required",
+       option4:"required",
+      }
+   });
+</script>
+<script type="text/javascript">
+  $(document).on('change','#qtype',function() {
+      var value = $(this).val();
+      if (value=='objective') {
+        $('#optionlist').attr('style','display:block;');
+      }else{
+        $('#optionlist').attr('style','display:none;');
+      }
+  })
+</script>
+{{/section}}
+

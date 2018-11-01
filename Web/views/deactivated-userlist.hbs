@@ -1,0 +1,189 @@
+  <link rel="stylesheet" type="text/css" href="/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="/css/jquery-ui.css">
+  <style type="text/css">
+    .dataTables_length {
+  float: left;
+  margin: 0 0 20px 15px;
+}
+  </style>
+  <main class="app-content">
+      <div class="app-title">
+        <div>
+          <h1><i class="fa fa-th-list"></i> Deactivated Users</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item">User Management</li>
+          <li class="breadcrumb-item active"><a href="#">Deactivated Users</a></li>
+        </ul>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="tile">
+            <div class="tile-body">
+              <table class="table table-hover table-bordered" id="sampleTable">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Country</th>
+                    <th>Phone</th>
+                    <th>Seeking</th>
+                    <th>SignUp Date</th>
+                    <th style="width: 11%">Image</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="width: 11%"></th>
+                    <th></th>
+                  </tr>
+              </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+{{#section 'script'}}
+    <script type="text/javascript" src="/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="/js/jszip.min.js"></script>
+    <script type="text/javascript" src="/js/pdfmake.min.js"></script>
+    <script type="text/javascript" src="/js/vfs_fonts.js"></script>
+    <script type="text/javascript" src="/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="/js/buttons.print.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script type="text/javascript">
+    var table=$('#sampleTable').dataTable({
+      processing : true,
+      dom: 'Bflrtip',
+        // buttons: [
+        //     'copy', 'csv', 'excel', 'pdf', 'print'
+        // ],
+           buttons: [
+            {
+                extend: 'collection',
+                text: 'Download',
+                buttons:
+                    [
+                               
+                        {
+                            extend: "copy",
+                            //exportOptions: { columns: ':visible:not(:last-child)' }, //last column has the action types detail/edit/delete
+                            exportOptions: { columns: ':visible:not(:nth-last-child(2),:nth-last-child(1))' },
+                            footer:false
+                        },
+                        {
+                            extend: "csv",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(2),:nth-last-child(1))' },
+                            footer: false
+                        },
+                        {
+                            extend: "excel",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(2),:nth-last-child(1))' },
+                            footer:false
+                        },
+                        {
+                            extend: "pdf",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(2),:nth-last-child(1))' },
+                            footer:false
+                        },
+                        {
+                            extend: "print",
+                            exportOptions: { columns: ':visible:not(:nth-last-child(2),:nth-last-child(1))' },
+                            footer: false
+                        }
+
+                    ]
+            }
+            ],
+      serverSide : true,
+      ajax : { url: '/admins/deactivated-userdata' },
+      initComplete: function () {
+       this.api().columns([1,2,4]).every( function () {
+                    var column = this;
+                    var select = $('<select class="rsfield"><option value="">Select</option></select>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+
+                column.data().unique().sort().each( function ( d, j ) {
+                   select.append( '<option value="'+d+'">'+d+'</option>' );
+                } );
+                } );
+              this.api().columns([5]).every( function () {
+                    var column = this;
+                    var select = $('<input type="text" placeholder=" Choose Date" class="datepicker rsfield"/>')
+                        .appendTo( $(column.footer()).empty() )
+                        .on( 'keyup click change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+                });
+                     $(".datepicker").datepicker({
+                        changeMonth: true,
+                        changeYear: true,
+                        dateFormat: "dd-mm-yy",
+                        //showOn: "button",
+                        showAnim: 'slideDown',
+                        showButtonPanel: false ,
+                        autoSize: true,
+                        //buttonImage: "//jqueryui.com/resources/demos/datepicker/images/calendar.gif",
+                        //buttonImageOnly: true,
+                        // buttonText: "Select date",
+                        closeText: "Clear"
+                      });
+
+                  this.api().columns([7]).every( function () {
+                    var column = this;
+                    var val='';
+                    var select = $('<button type="button" class="resetfields">Clear</button>')
+                        .appendTo( $(column.footer()).empty() ).on( 'click', function () {
+                            column
+                            .search(val ? '^'+val+'$' : '', true, false)
+                            .draw();
+                            $('.rsfield').val('').trigger('change');
+                        });
+                        
+                });
+    },
+      columns : [
+          {'data': 'name'},
+          {'data': 'gender'},
+          {'data': 'country'},
+          {'data': 'mobile'},
+          {'data': 'seeking'},
+          {'data': 'date'},
+          {'data': 'images'},
+          {'data': 'button'},
+      ]
+    });
+    $('#sampleTable tfoot tr').insertBefore($('#sampleTable thead tr'));
+    $('#sampleTable_wrapper #sampleTable_length').insertAfter($('#sampleTable_wrapper .dt-buttons'));
+    </script>
+{{/section}}
